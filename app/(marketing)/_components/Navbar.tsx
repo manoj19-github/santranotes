@@ -1,13 +1,19 @@
 import { useScrollTop } from "@/hooks/useScrollTop";
 import { cn } from "@/lib/utils";
-import React, { FC } from "react";
+import React, { FC, Fragment } from "react";
 import Logo from "./Logo";
 import ThemeToggler from "@/components/ui/ThemeToggler";
+import { useConvexAuth } from "convex/react";
+import { SignInButton, UserButton } from "@clerk/clerk-react";
+import { Button } from "@/components/ui/button";
+import Spinner from "@/components/ui/Spinner";
+import Link from "next/link";
 
 type NavbarProps = {};
 
 const Navbar: FC<NavbarProps> = (): JSX.Element => {
   const scrolled = useScrollTop();
+  const { isAuthenticated, isLoading } = useConvexAuth();
 
   return (
     <nav
@@ -20,6 +26,34 @@ const Navbar: FC<NavbarProps> = (): JSX.Element => {
         <Logo />
       </div>
       <div className="md:ml-auto md:justify-end justify-between w-full flex items-center gap-x-2 ">
+        {isLoading ? <Spinner /> : <></>}
+        {!isAuthenticated && !isLoading ? (
+          <Fragment>
+            <SignInButton>
+              <Button variant="ghost" size="sm">
+                Log In
+              </Button>
+            </SignInButton>
+
+            <SignInButton>
+              <Button variant="ghost" size="sm">
+                Get Santra Notes Free
+              </Button>
+            </SignInButton>
+          </Fragment>
+        ) : (
+          <></>
+        )}
+        {isAuthenticated && !isLoading ? (
+          <Fragment>
+            <Button variant="ghost" size="sm" asChild>
+              <Link href="/documents">Enter Santra Notes</Link>
+            </Button>
+            <UserButton afterSwitchSessionUrl="/" />
+          </Fragment>
+        ) : (
+          <></>
+        )}
         <ThemeToggler />
       </div>
     </nav>
