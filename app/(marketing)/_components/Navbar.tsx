@@ -2,6 +2,7 @@ import { useScrollTop } from "@/hooks/useScrollTop";
 import { cn } from "@/lib/utils";
 import React, { FC } from "react";
 import Logo from "./Logo";
+import ThemeToggler from "@/components/ui/ThemeToggler";
 
 type NavbarProps = {};
 
@@ -19,7 +20,7 @@ const Navbar: FC<NavbarProps> = (): JSX.Element => {
         <Logo />
       </div>
       <div className="md:ml-auto md:justify-end justify-between w-full flex items-center gap-x-2 ">
-        Login
+        <ThemeToggler />
       </div>
     </nav>
   );

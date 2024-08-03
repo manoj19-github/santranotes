@@ -9,7 +9,13 @@ const Heroes: FC<HeroesProps> = (): JSX.Element => {
           <Image
             src="/1358533.png"
             fill
-            className="object-fit md:object-contain mx-auto aspect-square"
+            className="object-fit md:object-contain mx-auto aspect-square dark:hidden"
+            alt="logo"
+          />
+          <Image
+            src="/fileherodark.png"
+            fill
+            className="object-fit md:object-contain mx-auto aspect-square hidden dark:block"
             alt="logo"
           />
         </div>
