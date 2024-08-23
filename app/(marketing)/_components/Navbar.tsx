@@ -1,3 +1,4 @@
+"use client";
 import { useScrollTop } from "@/hooks/useScrollTop";
 import { cn } from "@/lib/utils";
 import React, { FC, Fragment } from "react";
@@ -12,8 +13,8 @@ import Link from "next/link";
 type NavbarProps = {};
 
 const Navbar: FC<NavbarProps> = (): JSX.Element => {
-  const scrolled = useScrollTop();
   const { isAuthenticated, isLoading } = useConvexAuth();
+  const scrolled = useScrollTop();
 
   return (
     <nav
@@ -54,6 +55,7 @@ const Navbar: FC<NavbarProps> = (): JSX.Element => {
         ) : (
           <></>
         )}
+
         <ThemeToggler />
       </div>
     </nav>
