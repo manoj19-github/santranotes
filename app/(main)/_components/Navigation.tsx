@@ -1,6 +1,12 @@
 "use client";
 import { cn } from "@/lib/utils";
-import { ChevronsLeft, MenuIcon } from "lucide-react";
+import {
+  ChevronsLeft,
+  MenuIcon,
+  PlusCircle,
+  Search,
+  Settings,
+} from "lucide-react";
 import { usePathname } from "next/navigation";
 import React, {
   ElementRef,
@@ -13,6 +19,10 @@ import React, {
 } from "react";
 import { useMediaQuery } from "usehooks-ts";
 import UserItems from "./UserItems";
+import { useMutation, useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import Items from "./Items";
+import { toast } from "sonner";
 type NavigationProps = {};
 const Navigation: FC<NavigationProps> = (): JSX.Element => {
   const pathname = usePathname();
@@ -23,7 +33,8 @@ const Navigation: FC<NavigationProps> = (): JSX.Element => {
   const navbarRef = useRef<ElementRef<"div">>(null);
   const [isCollapsed, setIsCollapsed] = useState<boolean>(isMobileView);
   const [isResetting, setIsResetting] = useState<boolean>(false);
-
+  const documents = useQuery(api.documents.getDocument);
+  const createNewNote = useMutation(api.documents.createDocument);
   const handleMouseMove = (event: any) => {
     if (!isResizingRef.current) return;
     let newWidth = event.clientX;
@@ -83,6 +94,14 @@ const Navigation: FC<NavigationProps> = (): JSX.Element => {
       }, 300);
     }
   };
+  const handleCreateNewNote = () => {
+    const promise = createNewNote({ title: "Untitled" });
+    toast.promise(promise, {
+      loading: "Creating new note...",
+      success: "New Note created successfully",
+      error: "Error creating Note",
+    });
+  };
   useEffect(() => {
     if (isMobileView) {
       collapseWidth();
@@ -117,9 +136,17 @@ const Navigation: FC<NavigationProps> = (): JSX.Element => {
         </div>
         <div>
           <UserItems />
+          <Items onClick={() => {}} isSearch Icon={Search} label={"Search"} />
+          <Items onClick={() => {}} Icon={Settings} label={"Settings"} />
+          <Items
+            onClick={handleCreateNewNote}
+            Icon={PlusCircle}
+            label={"New page"}
+          />
         </div>
         <div className="mt-4">
-          <p>Documents</p>
+          {Array.isArray(documents) &&
+            documents?.map((self, index) => <p key={index}>{self.title}</p>)}
         </div>
         <div
           onMouseDown={handleMouseDown}
