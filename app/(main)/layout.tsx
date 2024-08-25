@@ -20,7 +20,7 @@ const MainLayout: FC<MainLayoutProps> = ({ children }): JSX.Element => {
   return (
     <div className="min-h-screen w-full flex dark:bg-[#1f1f1f] ">
       <Navigation />
-      <main className=" w-full">{children}</main>
+      <main className=" w-full flex-1 overflow-y-auto">{children}</main>
     </div>
   );
 };

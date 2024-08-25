@@ -12,6 +12,7 @@ import React, {
   useEffect,
 } from "react";
 import { useMediaQuery } from "usehooks-ts";
+import UserItems from "./UserItems";
 type NavigationProps = {};
 const Navigation: FC<NavigationProps> = (): JSX.Element => {
   const pathname = usePathname();
@@ -115,7 +116,7 @@ const Navigation: FC<NavigationProps> = (): JSX.Element => {
           <ChevronsLeft className="h-6 w-6" />
         </div>
         <div>
-          <p>Action items</p>
+          <UserItems />
         </div>
         <div className="mt-4">
           <p>Documents</p>
