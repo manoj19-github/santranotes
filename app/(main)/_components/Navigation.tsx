@@ -19,10 +19,11 @@ import React, {
 } from "react";
 import { useMediaQuery } from "usehooks-ts";
 import UserItems from "./UserItems";
-import { useMutation, useQuery } from "convex/react";
+import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import Items from "./Items";
 import { toast } from "sonner";
+import DocumentList from "./DocumentList";
 type NavigationProps = {};
 const Navigation: FC<NavigationProps> = (): JSX.Element => {
   const pathname = usePathname();
@@ -33,7 +34,6 @@ const Navigation: FC<NavigationProps> = (): JSX.Element => {
   const navbarRef = useRef<ElementRef<"div">>(null);
   const [isCollapsed, setIsCollapsed] = useState<boolean>(isMobileView);
   const [isResetting, setIsResetting] = useState<boolean>(false);
-  const documents = useQuery(api.documents.getDocument);
   const createNewNote = useMutation(api.documents.createDocument);
   const handleMouseMove = (event: any) => {
     if (!isResizingRef.current) return;
@@ -145,8 +145,7 @@ const Navigation: FC<NavigationProps> = (): JSX.Element => {
           />
         </div>
         <div className="mt-4">
-          {Array.isArray(documents) &&
-            documents?.map((self, index) => <p key={index}>{self.title}</p>)}
+          <DocumentList />
         </div>
         <div
           onMouseDown={handleMouseDown}

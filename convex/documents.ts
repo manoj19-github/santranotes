@@ -2,6 +2,26 @@ import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import { Doc, Id } from "./_generated/dataModel";
 
+export const getSidebar = query({
+  args: {
+    parentDocument: v.optional(v.id("documents")),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("No user identity");
+    const userId = identity.subject;
+    const documents = await ctx.db
+      .query("documents")
+      .withIndex("by_user_parent", (q) =>
+        q.eq("userId", userId).eq("parentDocument", args.parentDocument)
+      )
+      .filter((self) => self.eq(self.field("isArchived"), false))
+      .order("desc")
+      .collect();
+    return documents;
+  },
+});
+
 export const getDocument = query({
   handler: async (ctx) => {
     const identity = await ctx.auth.getUserIdentity();

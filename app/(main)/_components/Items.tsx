@@ -1,8 +1,9 @@
 "use client";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Id } from "@/convex/_generated/dataModel";
 import { cn } from "@/lib/utils";
 import { ChevronDown, ChevronRight, LucideIcon } from "lucide-react";
-import React, { FC } from "react";
+import React, { FC, MouseEvent } from "react";
 
 type ItemsProps = {
   id?: Id<"documents">;
@@ -15,8 +16,9 @@ type ItemsProps = {
   label: string;
   onClick: () => void;
   Icon: LucideIcon;
+  Skeleton?: any;
 };
-const Items: FC<ItemsProps> = ({
+const Items = ({
   label,
   onClick,
   Icon,
@@ -27,7 +29,12 @@ const Items: FC<ItemsProps> = ({
   documentIcon,
   expanded,
   id,
-}): JSX.Element => {
+}: ItemsProps): JSX.Element => {
+  const handleExpand = (event: any) => {
+    event.preventDefault();
+    event.stopPropagation();
+    onExpand?.();
+  };
   const ChevronIcon = expanded ? ChevronDown : ChevronRight;
   return (
     <div
@@ -43,7 +50,7 @@ const Items: FC<ItemsProps> = ({
         <div
           role="button"
           className="h-full rounded-sm hover:bg-neutral-300 dark:bg-neutral-600 mr-1"
-          onClick={() => {}}
+          onClick={handleExpand}
         >
           <ChevronIcon className="h-4 w-4 shrink-0 text-muted-foreground/50" />
         </div>
@@ -68,6 +75,18 @@ const Items: FC<ItemsProps> = ({
       ) : (
         <></>
       )}
+    </div>
+  );
+};
+
+Items.Skeleton = function ItemsSkeleton({ level }: { level?: number }) {
+  return (
+    <div
+      style={{ paddingLeft: level ? `${level * 12 + 25}px` : "12px" }}
+      className="flex gap-x-2 py-[3px]"
+    >
+      <Skeleton className="h-4 w-4" />
+      <Skeleton className="h-4 w-[30%]" />
     </div>
   );
 };
