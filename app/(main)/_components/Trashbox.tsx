@@ -1,4 +1,5 @@
 "use client";
+import ConfirmModal from "@/app/_components/modals/ConfirmModal";
 import { Input } from "@/components/ui/input";
 import Spinner from "@/components/ui/Spinner";
 import { api } from "@/convex/_generated/api";
@@ -35,7 +36,6 @@ const Trashbox: FC<TrashBoxProps> = (): JSX.Element => {
     });
   };
   const onRemoveHandler = async (event: any, documentId: Id<"documents">) => {
-    event.preventDetault();
     event.stopPropagation();
     const promise = deleteForever({ documentId });
     toast.promise(promise, {
@@ -84,13 +84,16 @@ const Trashbox: FC<TrashBoxProps> = (): JSX.Element => {
                 >
                   <Undo className="w-4 h-4 text-muted-foreground" />
                 </div>
-                <div
-                  onClick={(event) => onRemoveHandler(event, self._id)}
-                  role="button"
-                  className="cursor-pointer rounded-full p-2 hover:bg-neutral-200 ml-1"
+                <ConfirmModal
+                  onConfirm={(event: any) => onRemoveHandler(event, self._id)}
                 >
-                  <Trash className="w-4 h-4 text-muted-foreground text-rose-600" />
-                </div>
+                  <div
+                    role="button"
+                    className="cursor-pointer rounded-full p-2 hover:bg-neutral-200 ml-1"
+                  >
+                    <Trash className="w-4 h-4 text-muted-foreground text-rose-600" />
+                  </div>
+                </ConfirmModal>
               </div>
             </div>
           ))}
