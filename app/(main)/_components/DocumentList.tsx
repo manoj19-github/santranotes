@@ -69,10 +69,12 @@ const DocumentList: FC<DocumentListProps> = ({
             level={level}
           />
           {expanded[self._id] ? (
-            <DocumentList
-              parentDocumentId={self._id}
-              level={Number(level) + 1}
-            />
+            <>
+              <DocumentList
+                parentDocumentId={self._id}
+                level={typeof level === "undefined" ? 1 : Number(level) + 1}
+              />
+            </>
           ) : (
             <></>
           )}

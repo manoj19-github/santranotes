@@ -13,7 +13,7 @@ const DocumentsPage: FC<DocumentsPageProps> = (): JSX.Element => {
   const createDocument = useMutation(api.documents.createDocument);
   const onCreateNewNotes = () => {
     const promise = createDocument({
-      title: "Untitle",
+      title: "Untitled",
     });
     toast.promise(promise, {
       loading: "Creating a new note...",

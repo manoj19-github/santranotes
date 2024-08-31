@@ -50,3 +50,38 @@ export const createDocument = mutation({
     return newDocument;
   },
 });
+
+export const archiveDocument = mutation({
+  args: {
+    documentId: v.id("documents"),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("No user identity");
+    const userId = identity.subject;
+    const existingDocument = await ctx.db.get(args.documentId);
+    if (!existingDocument) throw new Error("No document found");
+    if (existingDocument.userId !== userId)
+      throw new Error("User does not own document");
+
+    const recursiveArchive = async (documentId: Id<"documents">) => {
+      const children = await ctx.db
+        .query("documents")
+        .withIndex("by_user_parent", (q) =>
+          q.eq("userId", userId).eq("parentDocument", documentId)
+        )
+        .collect();
+      for (const child of children) {
+        await ctx.db.patch(child._id, {
+          isArchived: true,
+        });
+        await recursiveArchive(child._id);
+      }
+    };
+    const document = await ctx.db.patch(args.documentId, {
+      isArchived: true,
+    });
+    await recursiveArchive(args.documentId);
+    return document;
+  },
+});
