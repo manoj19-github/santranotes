@@ -85,3 +85,88 @@ export const archiveDocument = mutation({
     return document;
   },
 });
+
+export const getTrashNotes = query({
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("No user identity");
+    const userId = identity.subject;
+    return await ctx.db
+      .query("documents")
+      .withIndex("by_user", (q) => q.eq("userId", userId))
+      .filter((q) => q.eq(q.field("isArchived"), true))
+      .order("desc")
+      .collect();
+  },
+});
+
+export const restoreNotes = mutation({
+  args: {
+    documentId: v.id("documents"),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("No user identity");
+    const userId = identity.subject;
+    const existingDocument = await ctx.db.get(args.documentId);
+    if (!existingDocument) throw new Error("No document found");
+    if (existingDocument.userId !== userId)
+      throw new Error("User does not own document");
+    const recursiveRestore = async (documentId: Id<"documents">) => {
+      const children = await ctx.db
+        .query("documents")
+        .withIndex("by_user_parent", (q) =>
+          q.eq("userId", userId).eq("parentDocument", documentId)
+        )
+        .collect();
+      for (const child of children) {
+        await ctx.db.patch(child._id, {
+          isArchived: false,
+        });
+        await recursiveRestore(child._id);
+      }
+    };
+    const options: Partial<Doc<"documents">> = {
+      isArchived: false,
+    };
+    if (existingDocument.parentDocument) {
+      const parentDocument = await ctx.db.get(existingDocument.parentDocument);
+      if (!!parentDocument && parentDocument.isArchived) {
+        options.parentDocument = undefined;
+      }
+    }
+    const document = await ctx.db.patch(args.documentId, options);
+    await recursiveRestore(args.documentId);
+    return document;
+  },
+});
+
+export const removeNotes = mutation({
+  args: {
+    documentId: v.id("documents"),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("No user identity");
+    const userId = identity.subject;
+    const existingDocument = await ctx.db.get(args.documentId);
+    if (!existingDocument) throw new Error("No document found");
+    if (existingDocument.userId !== userId)
+      throw new Error("User does not own document");
+    const recursiveRemove = async (documentId: Id<"documents">) => {
+      const children = await ctx.db
+        .query("documents")
+        .withIndex("by_user_parent", (q) =>
+          q.eq("userId", userId).eq("parentDocument", documentId)
+        )
+        .collect();
+      for (const child of children) {
+        await ctx.db.delete(child._id);
+        await recursiveRemove(child._id);
+      }
+    };
+    const document = await ctx.db.delete(args.documentId);
+    await recursiveRemove(args.documentId);
+    return document;
+  },
+});

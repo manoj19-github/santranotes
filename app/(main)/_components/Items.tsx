@@ -34,7 +34,7 @@ type ItemsProps = {
   level?: number;
   onExpand?: () => void;
   label: string;
-  onClick: () => void;
+  onClick?: () => void;
   Icon: LucideIcon;
   Skeleton?: any;
 };
@@ -93,7 +93,7 @@ const Items = ({
   };
   return (
     <div
-      onClick={onClick}
+      onClick={() => onClick?.()}
       role="button"
       style={{ paddingLeft: level ? `${level * 12 + 12}px` : "12px" }}
       className={cn(
