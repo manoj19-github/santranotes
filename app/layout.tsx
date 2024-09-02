@@ -4,6 +4,7 @@ import "./globals.css";
 import ThemeProvider from "@/components/providers/ThemeProvider";
 import { ConvexClientProvider } from "@/components/providers/ConvexProvider";
 import { Toaster } from "sonner";
+import SearchComponent from "@/components/searchComponent";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -42,6 +43,7 @@ export default function RootLayout({
             storageKey="SantraNotesThemes"
           >
             <Toaster position="bottom-center" />
+
             <div className="overflow-y-auto w-[98.9vw] overflow-x-hidden">
               {children}
             </div>
