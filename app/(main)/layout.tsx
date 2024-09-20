@@ -4,7 +4,7 @@ import { useConvexAuth } from "convex/react";
 import { redirect } from "next/navigation";
 import React, { FC, ReactNode } from "react";
 import Navigation from "./_components/Navigation";
-import SearchComponent from "@/components/searchComponent";
+import SearchComponent from "@/components/SearchComponent";
 
 type MainLayoutProps = {
   children: ReactNode;

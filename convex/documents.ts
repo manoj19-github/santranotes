@@ -184,3 +184,47 @@ export const getSearchNotes = query({
       .collect();
   },
 });
+
+export const getById = query({
+  args: {
+    documentId: v.id("documents"),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    // // if (!identity) return null;
+
+    const document = await ctx.db.get(args.documentId);
+    if (!document) return null;
+    if (document.isPublished && !document.isArchived) return document;
+    if (!identity) throw new Error("No user identity");
+    const userId = identity.subject;
+    if (document.userId !== userId)
+      throw new Error("User does not own document");
+    return document;
+  },
+});
+
+export const updateDocuments = mutation({
+  args: {
+    id: v.id("documents"),
+    title: v.optional(v.string()),
+    content: v.optional(v.string()),
+    coverImage: v.optional(v.string()),
+    isPublished: v.optional(v.boolean()),
+    icon: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("No user identity");
+    const existingDocument = await ctx.db.get(args.id);
+    if (!existingDocument) throw new Error("No document found");
+    const userId = identity.subject;
+    if (existingDocument.userId !== userId)
+      throw new Error("User does not own document");
+
+    const { id, ...rest } = args;
+    const document = await ctx.db.patch(args.id, { ...rest });
+    return document;
+  },
+});
+

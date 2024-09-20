@@ -80,7 +80,7 @@ const Trashbox: FC<TrashBoxProps> = (): JSX.Element => {
                 <div
                   onClick={(event) => onRestoreHandler(event, self._id)}
                   role="button"
-                  className="cursor-pointer rounded-full p-2 hover:bg-neutral-200"
+                  className="cursor-pointer rounded-full p-2 hover:bg-neutral-200 dark:hover:bg-neutral-600"
                 >
                   <Undo className="w-4 h-4 text-muted-foreground" />
                 </div>

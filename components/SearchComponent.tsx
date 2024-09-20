@@ -31,6 +31,7 @@ const SearchComponent: FC<SearchComponentProps> = () => {
   const onClose = useSearch((store) => store.onClose);
   const onSelectHandler = (id: string) => {
     router.push(`/documents/${id}`);
+    onClose();
   };
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
