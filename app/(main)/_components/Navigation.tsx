@@ -133,7 +133,7 @@ const Navigation: FC<NavigationProps> = (): JSX.Element => {
       <aside
         ref={sidebarRef}
         className={cn(
-          "group/sidebar h-full min-h-screen bg-secondary overflow-y-auto fixed md:relative flex w-60  flex-col z-[99999]    ",
+          "group/sidebar h-full min-h-screen bg-secondary overflow-y-auto fixed md:relative flex w-60  flex-col z-[999]    ",
           isResetting && "transition-all ease-in-out duration-300",
           isMobileView && "w-0"
         )}
