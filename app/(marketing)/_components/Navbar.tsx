@@ -19,7 +19,7 @@ const Navbar: FC<NavbarProps> = (): JSX.Element => {
   return (
     <nav
       className={cn(
-        "z-[999] bg-background fixed top-0   flex items-center w-full p-5",
+        "z-[99] bg-background fixed top-0   flex items-center w-full p-5",
         scrolled ? "border-b shadow-md" : ""
       )}
     >

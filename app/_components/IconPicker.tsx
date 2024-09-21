@@ -9,14 +9,15 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { twMerge } from "tailwind-merge";
+import useIsMounted from "@/hooks/useIsMounted";
 type IconPickerProps = {
-  onChange: (icon: string) => void;
+  onEmojiChange: (icon: string) => void;
   children: ReactNode;
   asChild?: boolean;
   className?: string;
 };
 const IconPicker: FC<IconPickerProps> = ({
-  onChange,
+  onEmojiChange,
   children,
   asChild,
   className,
@@ -25,7 +26,8 @@ const IconPicker: FC<IconPickerProps> = ({
   const themeMap = { light: Theme.LIGHT, dark: Theme.DARK };
   const currentTheme = (resolvedTheme || "light") as keyof typeof themeMap;
   const theme = themeMap[currentTheme];
-
+  const isMounted = useIsMounted();
+  if (!isMounted) return <></>;
   return (
     <Popover>
       <PopoverTrigger asChild={asChild}>{children}</PopoverTrigger>
@@ -35,7 +37,10 @@ const IconPicker: FC<IconPickerProps> = ({
         <EmojiPicker
           height={350}
           theme={theme}
-          onEmojiClick={(e) => onChange(e.emoji)}
+          onEmojiClick={(e) => {
+            onEmojiChange(e.emoji);
+            console.log("icon select >>>>>>>>>>>>> ", e);
+          }}
         />
       </PopoverContent>
     </Popover>

@@ -1,4 +1,5 @@
 "use client";
+import DocumentCover from "@/app/_components/DocumentCover";
 import Toolbar from "@/app/_components/Toolbar";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
@@ -21,9 +22,13 @@ const DocumentIdMain: FC<DocumentIdMainProps> = ({ params }): JSX.Element => {
     return <div>not found</div>;
   }
   return (
-    <div className=" pb-40">
-      <div className="md:max-w-3xl lg:max-w-7xl mx-auto">
-        <div className="h-[35vh]" />
+    <div className=" pb-40 w-[100%]">
+      <div className="md:max-w-3xl lg:max-w-[1600px] mx-auto mt-12">
+        <DocumentCover
+          coverUrl={selectedDocuments.coverImage}
+          preview={selectedDocuments.isPublished}
+        />
+        <div className="mt-2" />
         <Toolbar initialData={selectedDocuments} />
       </div>
     </div>

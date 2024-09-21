@@ -22,10 +22,13 @@ const MainLayout: FC<MainLayoutProps> = ({ children }): JSX.Element => {
     <div className="min-h-screen w-full flex dark:bg-[#1f1f1f] ">
       <Navigation />
       <div>
+        {" "}
         <SearchComponent />
       </div>
 
-      <main className=" w-full flex-1 overflow-y-auto">{children}</main>
+      <main className="  w-full flex-1 overflow-y-auto lg:ml-[14vw]">
+        {children}
+      </main>
     </div>
   );
 };

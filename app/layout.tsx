@@ -4,7 +4,7 @@ import "./globals.css";
 import ThemeProvider from "@/components/providers/ThemeProvider";
 import { ConvexClientProvider } from "@/components/providers/ConvexProvider";
 import { Toaster } from "sonner";
-
+import { EdgeStoreProvider } from "../lib/edgestore";
 import ModalProvider from "./_components/modals/ModalProvider";
 const inter = Inter({ subsets: ["latin"] });
 
@@ -35,22 +35,24 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <ConvexClientProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-            storageKey="SantraNotesThemes"
-          >
-            <Toaster position="bottom-center" />
-            <ModalProvider />
+        <EdgeStoreProvider>
+          <ConvexClientProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+              storageKey="SantraNotesThemes"
+            >
+              <Toaster position="bottom-center" />
+              <ModalProvider />
 
-            <div className="overflow-y-auto w-[98.9vw] overflow-x-hidden">
-              {children}
-            </div>
-          </ThemeProvider>
-        </ConvexClientProvider>
+              <div className="overflow-y-auto w-[98.9vw] overflow-x-hidden">
+                {children}
+              </div>
+            </ThemeProvider>
+          </ConvexClientProvider>
+        </EdgeStoreProvider>
       </body>
     </html>
   );

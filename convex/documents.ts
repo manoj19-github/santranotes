@@ -228,3 +228,34 @@ export const updateDocuments = mutation({
   },
 });
 
+export const removeIcon = mutation({
+  args: {
+    documentId: v.id("documents"),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("No user identity");
+    const existingDocument = await ctx.db.get(args.documentId);
+    if (!existingDocument) throw new Error("No document found");
+    const userId = identity.subject;
+    if (existingDocument.userId !== userId)
+      throw new Error("User does not own document");
+    return await ctx.db.patch(args.documentId, { icon: undefined });
+  },
+});
+
+export const removeCoverImage = mutation({
+  args: {
+    documentId: v.id("documents"),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("No user identity");
+    const existingDocument = await ctx.db.get(args.documentId);
+    if (!existingDocument) throw new Error("No document found");
+    const userId = identity.subject;
+    if (existingDocument.userId !== userId)
+      throw new Error("User does not own document");
+    return await ctx.db.patch(args.documentId, { coverImage: undefined });
+  },
+});

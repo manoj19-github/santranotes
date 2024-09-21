@@ -35,7 +35,7 @@ const Navbar: FC<NavbarProps> = ({
 
   return (
     <Fragment>
-      <nav className="bg-background dark:bg-[#f1f1f1] px-3 py-2 w-full flex items-center gap-x-3">
+      <nav className="  px-3 py-2 !-z-[1] w-full flex items-center gap-x-3 ">
         {isCollapsed ? (
           <MenuIcon
             role="button"
