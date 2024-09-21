@@ -66,7 +66,7 @@ const Publish: FC<DocumentPublishProps> = ({ initialDoc }): JSX.Element => {
           size="sm"
           asChild
           variant={"ghost"}
-          className="mt-2 w-full flex gap-x-2 border border-red-500"
+          className="mt-2 w-full flex gap-x-2"
         >
           <Fragment>
             <p>Publish</p>
