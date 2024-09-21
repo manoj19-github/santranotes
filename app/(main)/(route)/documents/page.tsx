@@ -7,13 +7,18 @@ import { PlusCircle } from "lucide-react";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 type DocumentsPageProps = {};
 const DocumentsPage: FC<DocumentsPageProps> = (): JSX.Element => {
   const { user, isSignedIn } = useUser();
+  const router = useRouter();
   const createDocument = useMutation(api.documents.createDocument);
   const onCreateNewNotes = () => {
     const promise = createDocument({
       title: "Untitled",
+    }).then((docId) => {
+      // redirect to the new document
+      router.push(`/documents/${docId}`);
     });
     toast.promise(promise, {
       loading: "Creating a new note...",

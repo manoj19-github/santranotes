@@ -9,7 +9,7 @@ import {
   Settings,
   Trash,
 } from "lucide-react";
-import { useParams, usePathname } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import React, {
   ElementRef,
   FC,
@@ -39,6 +39,7 @@ type NavigationProps = {};
 const Navigation: FC<NavigationProps> = (): JSX.Element => {
   const pathname = usePathname();
   const params = useParams();
+  const router = useRouter();
   const settings = useSettingsHandler();
   const isMobileView = useMediaQuery("(max-width: 768px)");
   const isResizingRef = useRef<boolean>(false);
@@ -109,7 +110,9 @@ const Navigation: FC<NavigationProps> = (): JSX.Element => {
     }
   };
   const handleCreateNewNote = () => {
-    const promise = createNewNote({ title: "Untitled" });
+    const promise = createNewNote({ title: "Untitled" }).then((docId) => {
+      router.push(`/documents/${docId}`);
+    });
     toast.promise(promise, {
       loading: "Creating new note...",
       success: "New Note created successfully",

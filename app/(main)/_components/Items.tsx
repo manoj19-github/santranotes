@@ -69,7 +69,7 @@ const Items = ({
       title: "Untitled",
     }).then((documentId) => {
       if (!expanded) onExpand?.();
-      // router.push(`/documents/${documentId}`);
+      router.push(`/documents/${documentId}`);
     });
     toast.promise(promise, {
       loading: "Creating Document...",
@@ -84,7 +84,11 @@ const Items = ({
 
     const promise = archiveDocument({
       documentId: id,
-    }).catch((error) => {});
+    })
+      .then(() => {
+        router.push("/documents");
+      })
+      .catch((error) => {});
     toast.promise(promise, {
       loading: "Moving to Trash...",
       success: "Note moved to Trash",
