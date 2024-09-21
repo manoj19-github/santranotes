@@ -28,16 +28,32 @@ const CoverImageModal: FC<CoverImageModalProps> = (): JSX.Element => {
     setIsSubmitting(false);
   };
   const onChangeHandler = async (file?: File) => {
-    if (file) {
+    try {
       setIsSubmitting(true);
-      setCoverFile(file);
-      const response = await edgestore.publicFiles.upload({
-        file,
-      });
-      await updateDocuments({
-        id: params?.documentId as Id<"documents">,
-        coverImage: response?.url,
-      });
+      if (file) {
+        setCoverFile(file);
+        let fileResponse: any;
+        if (coverImageState?.url) {
+          fileResponse = await edgestore.publicFiles.upload({
+            file,
+            options: {
+              replaceTargetUrl: coverImageState.url,
+            },
+          });
+        } else {
+          fileResponse = await edgestore.publicFiles.upload({
+            file,
+          });
+        }
+
+        await updateDocuments({
+          id: params?.documentId as Id<"documents">,
+          coverImage: fileResponse?.url,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
       onCloseHandler();
     }
   };

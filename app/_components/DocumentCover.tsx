@@ -48,7 +48,7 @@ const DocumentCover: FC<DocumentCoverProps> = ({
             className="text-muted-foreground text-xs gap-x-2 "
             variant={"outline"}
             size={"sm"}
-            onClick={coverImage.onOpen}
+            onClick={() => coverImage.onReplace(coverUrl as string)}
           >
             <ImageIcon className="h-4 w-4" />
             Change Cover
