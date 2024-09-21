@@ -13,7 +13,9 @@ import { useMutation } from "convex/react";
 import { useParams } from "next/navigation";
 import { FC, useState } from "react";
 import { SingleImageDropzone } from "../SingleImageUploader";
+import { Skeleton } from "../ui/skeleton";
 
+type CoverImageSkeletonProps = {};
 type CoverImageModalProps = {};
 const CoverImageModal: FC<CoverImageModalProps> = (): JSX.Element => {
   const params = useParams();
@@ -78,4 +80,10 @@ const CoverImageModal: FC<CoverImageModalProps> = (): JSX.Element => {
   );
 };
 
+export const CoverSkeleton: FC<CoverImageSkeletonProps> = (): JSX.Element => {
+  return <Skeleton className="w-full h-[38vh] rounded-lg bg-gray-100" />;
+};
+
 export default CoverImageModal;
+
+
